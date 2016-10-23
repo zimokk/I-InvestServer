@@ -13,6 +13,7 @@ let userSchema = new db.Schema({
     },
     email: String,
     age: Number,
+    sex: String,
     updatedAt: {
         type: Date,
         default: Date.now

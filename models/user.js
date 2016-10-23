@@ -12,7 +12,8 @@ model.toDTO = async(function(user){
         login: user.login,
         password: user.password,
         email: user.email,
-        age: user.age
+        age: user.age,
+        sex: user.sex
     }
 });
 
@@ -28,7 +29,8 @@ model.createMock = function () {
         login: "login",
         password: "pass",
         email: "zimokk1@gmail.com",
-        age: 20
+        age: 20,
+        sex: 'male'
     });
 };
 
@@ -37,12 +39,29 @@ model.addNew = async (function(user) {
         login: user.login,
         password: user.password,
         email: user.email,
-        age: user.age
+        age: user.age,
+        sex: user.sex
     });
-
     const addUserResult = await (newUser.save());
-
     return addUserResult;
+});
+
+model.getById = async(function(id){
+    if(!id)
+        return {statusCode: 4, data: null, message: "User not found"};
+    let user = await(db.User.findOne({_id:id}));
+    if (!user)
+        return {statusCode: 4, data: null, message: "User not found"};
+    return {statusCode: 0, data: await(this.toDTO(user)), message: "Success"};
+});
+
+model.removeById = async (function(id){
+    if(!id)
+        return {statusCode: 4, data: null, message: "User not found"};
+    let user = await (db.User.findOne({_id:id}));
+    modelHelper.setStatusRemoved(user);
+    let removedUser = user.save();
+    return user;
 });
 
 // model.updateBuilding = async(function(data){
@@ -107,23 +126,7 @@ model.addNew = async (function(user) {
 //     return updatedBuildings;
 // });
 //
-// model.removeById = async (function(id){
-//
-//     if(!id)
-//         return {statusCode: 4, data: null, message: "Building not found"};
-//     const models = require('./index');
-//
-//     let building = await (db.Building.findOne({_id:id}));
-//     modelHelper.setStatusRemoved(building);
-//
-//     let removedBuilding = building.save();
-//     let removedImages = models.Image.removeRange(building.imageIds);
-//     let removedGallery = models.Image.removeRange(building.galleryIds);
-//     let removedAmenities = models.Amenity.removeByBuildingId(id);
-//     let removedFloors = models.Floor.removeByBuildingId(id);
-//
-//     return building;
-// });
+
 //
 // model.update = async(function(data){
 //     const imgModel = require('./image');
@@ -148,14 +151,6 @@ model.addNew = async (function(user) {
 //     return await(building.save());
 // });
 //
-// model.getById = async(function(id){
-//     if(!id)
-//         return {statusCode: 4, data: null, message: "Building not found"};
-//     let building = await(db.Building.findOne({_id:id}));
-//     if (!building)
-//         return {statusCode: 4, data: null, message: "Building not found"};
-//     return {statusCode: 0, data: await(this.toDTO(building)), message: "Success"};
-// });
 //
 // model.removeFromGallery = async(function(buildingId, imageId){
 //     const imgModel = require('./image');

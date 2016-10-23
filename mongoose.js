@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 
 //mongoose.set("debug", true);
 // Connect to DB.
-mongoose.connect('localhost:27017');
+mongoose.connect('localhost:27017/coursedb');
 
 var db = mongoose.connection;
 

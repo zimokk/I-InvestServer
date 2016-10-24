@@ -2,10 +2,10 @@
 let express = require('express');
 let router = express.Router();
 
-let users = require('./users');
+let user = require('./user');
 
 /* GET home page. */
-router.use('/users', users);
+router.use('/user', user);
 
 router.get('/', function(req, res, next) {
   res.json({ message: 'index' });

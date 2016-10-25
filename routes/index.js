@@ -15,11 +15,35 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/authorize', function ( req, res, next ) {
-  User.authorize({
+  let token = req.body.token;
+  if(token){
+    User.tokenAutorize(token).then(function ( data ) {
+      if(!data){
+        res.send({
+          statusCode: 500,
+          data: null,
+          message: 'Unauthorized'
+        });
+      } else if(data.message && data.name) {
+        res.send({
+          statusCode: 500,
+          data: data,
+          message: 'Token error'
+        });
+      } else{
+        res.send({
+          statusCode: 0,
+          data: data,
+          message: 'Authorized'
+        });
+      }
+    });
+  } else{
+    User.login({
       login: req.body.login,
       password: req.body.password
-    }).then(function ( userRole ) {
-      if(!userRole){
+    }).then(function ( data ) {
+      if(!data){
         res.send({
           statusCode: 500,
           data: null,
@@ -28,13 +52,12 @@ router.post('/authorize', function ( req, res, next ) {
       }else{
         res.send({
           statusCode: 0,
-          data: {
-            role: userRole
-          },
+          data: data,
           message: 'Authorized'
         });
       }
-  });
+    });
+  }
 });
 
 module.exports = router;

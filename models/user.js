@@ -1,6 +1,7 @@
 'use strict';
 const async = require('asyncawait/async');
 const await = require('asyncawait/await');
+const jwt = require('jsonwebtoken');
 const db = require('../db');
 const modelHelper = require('../helpers').model;
 
@@ -82,13 +83,47 @@ model.removeById = async (function(_id){
     return user;
 });
 
-model.authorize = async( function ( user ) {
+model.tokenAutorize = async(function ( token ) {
+    let decoded;
+    try {
+        decoded = jwt.verify(token, 'secret');
+    } catch(err) {
+        return err;
+    }
+    if(decoded){
+        return {
+            login: decoded.login,
+            role: decoded.role,
+            token: token
+        };
+    }
+    // let dbUser = await(getByLogin(user.login)).data;
+    // if(!dbUser){
+    //     return false;
+    // } else{
+    //     if(dbUser.login == user.login && user.password == dbUser.password){
+    //         let token = await(jwt.sign(dbUser, "secret", {expiresIn: '1h'}));
+    //         return {
+    //             login: dbUser.login,
+    //             role: dbUser.role,
+    //             token: token
+    //         };
+    //     }
+    // }
+});
+
+model.login = async( function ( user ) {
     let dbUser = await(getByLogin(user.login)).data;
     if(!dbUser){
         return false;
     } else{
         if(dbUser.login == user.login && user.password == dbUser.password){
-            return dbUser.role;
+            let token = await(jwt.sign(dbUser, "secret", {expiresIn: '1h'}));
+            return {
+                login: dbUser.login,
+                role: dbUser.role,
+                token: token
+            };
         }
     }
 } );

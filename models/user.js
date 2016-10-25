@@ -11,10 +11,20 @@ model.toDTO = async(function(user){
         _id: user._id,
         login: user.login,
         password: user.password,
+        role: user.role,
         email: user.email,
         age: user.age,
         sex: user.sex
     }
+});
+
+let getByLogin = async(function(login){
+    if(!login)
+        return {statusCode: 4, data: null, message: "User not found"};
+    let user = await(db.User.findOne({login:login}));
+    if (!user)
+        return {statusCode: 4, data: null, message: "User not found"};
+    return {statusCode: 0, data: await(model.toDTO(user)), message: "Success"};
 });
 
 model.getExisting = async (function(){
@@ -28,6 +38,7 @@ model.addNew = async (function(user) {
     let newUser = new db.User({
         login: user.login,
         password: user.password,
+        role: user.role,
         email: user.email,
         age: user.age,
         sex: user.sex
@@ -46,11 +57,11 @@ model.getById = async(function(_id){
 });
 
 model.update = async(function(data){
-
     let user = await(db.User.findOne({_id:data._id}));
     if(user){
         user.login =  data.login;
         user.password = data.password;
+        user.role = data.role;
         user.email = data.email;
         user.age = data.age;
         user.sex = data.sex;
@@ -70,5 +81,16 @@ model.removeById = async (function(_id){
     let removedUser = user.save();
     return user;
 });
+
+model.authorize = async( function ( user ) {
+    let dbUser = await(getByLogin(user.login)).data;
+    if(!dbUser){
+        return false;
+    } else{
+        if(dbUser.login == user.login && user.password == dbUser.password){
+            return dbUser.role;
+        }
+    }
+} );
 
 module.exports = model;

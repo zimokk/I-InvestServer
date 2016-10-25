@@ -1,5 +1,7 @@
 'use strict';
 let express = require('express');
+const async = require('asyncawait/async');
+const await = require('asyncawait/await');
 let router = express.Router();
 const Company = require('../models/company');
 

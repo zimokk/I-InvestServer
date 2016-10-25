@@ -11,6 +11,10 @@ let userSchema = new db.Schema({
         type: String,
         required: [true, 'password is required']
     },
+    role: {
+        type: String,
+        required: [true, 'role is required']
+    },
     email: String,
     age: Number,
     sex: String,

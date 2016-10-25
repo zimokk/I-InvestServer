@@ -1,17 +1,23 @@
 'use strict';
 let express = require('express');
+const async = require('asyncawait/async');
+const await = require('asyncawait/await');
+const statusCodes = require('../common/statuscodes');
 let router = express.Router();
 const User = require('../models/user');
 
 let formObject = function ( req ) {
     return{
+        _id: req.body._id || null,
         login: req.body.login,
         password: req.body.password,
+        role: 'user',
         email: req.body.email,
         age: req.body.age,
         sex: req.body.sex
     }
 };
+
 router.get('/all', function(req, res, next) {
   User.getExisting().then(function ( success ) {
     if(success){

@@ -15,6 +15,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+app.use(function ( req, res, next ) {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5555');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With');
+  next();
+});
+
 app.use('/', routes);
 
 // catch 404 and forward to error handler

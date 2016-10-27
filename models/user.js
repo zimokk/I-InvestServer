@@ -15,7 +15,8 @@ model.toDTO = async(function(user){
         role: user.role,
         email: user.email,
         age: user.age,
-        sex: user.sex
+        sex: user.sex,
+        status: user.status
     }
 });
 
@@ -80,7 +81,7 @@ model.removeById = async (function(_id){
     let user = await (db.User.findOne({_id:_id}));
     modelHelper.setStatusRemoved(user);
     let removedUser = user.save();
-    return user;
+    return removedUser;
 });
 
 model.tokenAutorize = async(function ( token ) {

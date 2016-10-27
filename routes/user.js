@@ -11,7 +11,7 @@ let formObject = function ( req ) {
         _id: req.body._id || null,
         login: req.body.login,
         password: req.body.password,
-        role: 'user',
+        role: req.body.role || 'user',
         email: req.body.email,
         age: req.body.age,
         sex: req.body.sex
@@ -87,7 +87,11 @@ router.put('/update', function(req,res){
   User.update(user)
       .then(async(data=>{
         if(data){
-          res.send({statusCode: statusCodes.success, data: data, message: 'Successfully updated'});
+          res.send({
+              statusCode: statusCodes.success,
+              data: data,
+              message: 'Successfully updated'
+          });
         }
         else{
           res.send({

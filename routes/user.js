@@ -8,13 +8,13 @@ const User = require('../models/user');
 
 let formObject = function ( req ) {
     return{
-        _id: req.body._id || null,
-        login: req.body.login,
-        password: req.body.password,
-        role: req.body.role || 'user',
-        email: req.body.email,
-        age: req.body.age,
-        sex: req.body.sex
+        _id: req.body.user._id || null,
+        login: req.body.user.login,
+        password: req.body.user.password,
+        role: req.body.user.role || 'user',
+        email: req.body.user.email,
+        age: req.body.user.age,
+        sex: req.body.user.sex
     }
 };
 
@@ -66,7 +66,6 @@ router.get('/get/:id', function(req,res){
 
 router.post('/new', function(req, res){
   let user = formObject(req);
-
   User.addNew(user)
       .then(async(data=>{
         if(data){

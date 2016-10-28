@@ -1,5 +1,6 @@
 'use strict';
 var express = require('express');
+let cors = require('cors');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -9,6 +10,11 @@ var bodyParser = require('body-parser');
 var routes = require('./routes');
 
 var app = express();
+
+let corsOptions = {
+  origin: 'http://localhost:5555'
+};
+app.use(cors(corsOptions));
 
 app.use(logger('dev'));
 app.use(bodyParser.json());

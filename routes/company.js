@@ -61,6 +61,38 @@ router.get('/get/:id', function(req,res){
         });
 });
 
+router.get('/getByUser/:id', function ( req, res ) {
+    if (!req.params.id){
+        res.send({
+            statusCode: 500,
+            data: null,
+            message: 'id not found'
+        });
+    }
+    Company.getByUserId(req.params.id).then(function ( success ) {
+        if(success){
+            res.send({
+                statusCode: 0,
+                data: success,
+                message: 'Companies result'
+            });
+        } else {
+            res.send({
+                statusCode: 500,
+                data: null,
+                message: 'Server Error'
+            });
+        }
+    })
+    .catch(err=>{
+        res.send({
+            statusCode: 500,
+            data: err,
+            message: 'Server error'
+        });
+    });
+});
+
 router.post('/new', function(req, res){
     let company = formObject(req);
 

@@ -1,11 +1,9 @@
-/**
- * Created by Dmitry_ on 23.10.2016.
- */
 'use strict';
 const async = require('asyncawait/async');
 const await = require('asyncawait/await');
 const db = require('../db');
 const modelHelper = require('../helpers').model;
+let User = require('./user');
 
 let model = {};
 
@@ -38,24 +36,30 @@ model.createMock = function () {
 };
 
 model.addNew = async (function(company) {
-    let newCompany = new db.Company({
-        _id: company._id,
-        name: company.name,
-        state: company.state,
-        userId: company.userId,
-        foundation: company.foundation,
-        budget: company.budget
-    });
-    const addCompanyResult = await (newCompany.save());
-    return addCompanyResult;
+    let user = await(User.getById(company.userId));
+    console.log(user);
+    if(user){
+        let newCompany = new db.Company({
+            name: company.name,
+            state: company.state,
+            userId: user.data._id,
+            foundation: company.foundation,
+            budget: company.budget
+        });
+        const addCompanyResult = await (newCompany.save());
+        return addCompanyResult;
+    } else{
+        return {statusCode: 404, data: null, message: "User not found"};
+    }
+
 });
 
 model.getById = async(function(id){
     if(!id)
-        return {statusCode: 4, data: null, message: "Company not found"};
+        return {statusCode: 404, data: null, message: "Company not found"};
     let company = await(db.Company.findOne({_id:id}));
     if (!company)
-        return {statusCode: 4, data: null, message: "Company not found"};
+        return {statusCode: 404, data: null, message: "Company not found"};
     return {statusCode: 0, data: await(this.toDTO(company)), message: "Success"};
 });
 
@@ -85,7 +89,7 @@ model.update = async(function(data){
 
 model.removeById = async (function(id){
     if(!id)
-        return {statusCode: 4, data: null, message: "Company not found"};
+        return {statusCode: 404, data: null, message: "Company not found"};
     let company = await (db.Company.findOne({_id:id}));
     modelHelper.setStatusRemoved(company);
     let removedCompany = company.save();

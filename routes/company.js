@@ -3,19 +3,21 @@ let express = require('express');
 const async = require('asyncawait/async');
 const await = require('asyncawait/await');
 let router = express.Router();
+const statusCodes = require('../common/statuscodes');
 const Company = require('../models/company');
 
 let formObject = function ( req ) {
     return{
-        name: req.body.name,
-        state: req.body.state,
-        userId: req.body.userId,
-        foundation: req.body.foundation,
-        budget: req.body.budget
+        _id: req.body.company._id || null,
+        name: req.body.company.name,
+        state: req.body.company.state,
+        userId: req.body.company.userId,
+        foundation: req.body.company.foundation,
+        budget: req.body.company.budget
     }
 };
 
-router.get('/all', function(req, res, next) {
+router.get('/all', function(req, res) {
     Company.getExisting().then(function ( success ) {
             if(success){
                 res.send({
@@ -48,7 +50,7 @@ router.get('/get/:id', function(req,res){
             message: 'id not found'
         });
     }
-    User.getById(req.params.id)
+    Company.getById(req.params.id)
         .then(success=>{
             res.send(success);
         })
@@ -95,7 +97,7 @@ router.get('/getByUser/:id', function ( req, res ) {
 
 router.post('/new', function(req, res){
     let company = formObject(req);
-
+    console.log(company.userId);
     Company.addNew(company)
         .then(async(data=>{
             if(data){

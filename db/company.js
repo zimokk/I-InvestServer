@@ -11,7 +11,10 @@ let companySchema = new db.Schema({
         type: Number,
         required: [true, 'state is required']
     },
-    userId: [db.Schema.Types.ObjectId],
+    userId: {
+        type: [db.Schema.Types.ObjectId],
+        required: true
+    },
     foundation: Number,
     budget: Number,
     updatedAt: {

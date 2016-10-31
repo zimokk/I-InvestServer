@@ -23,10 +23,10 @@ model.toDTO = async(function(user){
 
 let getByLogin = async(function(login){
     if(!login)
-        return {statusCode: 4, data: null, message: "User not found"};
+        return {statusCode: 404, data: null, message: "User not found"};
     let user = await(db.User.findOne({login:login, status: 'updated'}));
     if (!user)
-        return {statusCode: 4, data: null, message: "User not found"};
+        return {statusCode: 404, data: null, message: "User not found"};
     return {statusCode: 0, data: await(model.toDTO(user)), message: "Success"};
 });
 
@@ -53,10 +53,10 @@ model.addNew = async (function(user) {
 
 model.getById = async(function(_id){
     if(!_id)
-        return {statusCode: 4, data: null, message: "User not found"};
+        return {statusCode: 404, data: null, message: "User not found"};
     let user = await(db.User.findOne({_id:_id, status: 'updated'}));
     if (!user)
-        return {statusCode: 4, data: null, message: "User not found"};
+        return {statusCode: 404, data: null, message: "User not found"};
     return {statusCode: 0, data: await(this.toDTO(user)), message: "Success"};
 });
 
@@ -89,7 +89,7 @@ model.removeById = async (function(_id){
 
 model.ban = async(function ( _id ) {
     if(!_id)
-        return {statusCode: 4, data: null, message: "User not found"};
+        return {statusCode: 404, data: null, message: "User not found"};
     let user = await (db.User.findOne({_id:_id, status: 'updated'}));
     user.isBanned = true;
     let bannedUser = user.save();

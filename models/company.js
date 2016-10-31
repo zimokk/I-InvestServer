@@ -59,6 +59,13 @@ model.getById = async(function(id){
     return {statusCode: 0, data: await(this.toDTO(company)), message: "Success"};
 });
 
+model.getByUserId = async(function(userId){
+    let companies = await(db.Company.find({userId:userId}));
+    return companies.map(company=>{
+        return await (this.toDTO(company));
+    });
+});
+
 model.update = async(function(data){
 
     let company = await(db.Company.findOne({_id:data._id}));

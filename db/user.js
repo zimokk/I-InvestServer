@@ -15,6 +15,7 @@ let userSchema = new db.Schema({
         type: String,
         required: [true, 'role is required']
     },
+    isBanned: Boolean,
     email: String,
     age: Number,
     sex: String,

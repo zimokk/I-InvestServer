@@ -13,6 +13,7 @@ model.toDTO = async(function(user){
         login: user.login,
         password: user.password,
         role: user.role,
+        isBanned: user.isBanned,
         email: user.email,
         age: user.age,
         sex: user.sex,
@@ -41,6 +42,7 @@ model.addNew = async (function(user) {
         login: user.login,
         password: user.password,
         role: user.role,
+        isBanned: user.isBanned,
         email: user.email,
         age: user.age,
         sex: user.sex
@@ -65,6 +67,7 @@ model.update = async(function(data){
         user.password = data.password;
         user.role = data.role;
         user.email = data.email;
+        user.isBanned = data.isBanned;
         user.age = data.age;
         user.sex = data.sex;
 
@@ -84,6 +87,15 @@ model.removeById = async (function(_id){
     return removedUser;
 });
 
+model.ban = async(function ( _id ) {
+    if(!_id)
+        return {statusCode: 4, data: null, message: "User not found"};
+    let user = await (db.User.findOne({_id:_id, status: 'updated'}));
+    user.isBanned = true;
+    let bannedUser = user.save();
+    return bannedUser;
+});
+
 model.tokenAutorize = async(function ( token ) {
     let decoded;
     try {
@@ -95,22 +107,10 @@ model.tokenAutorize = async(function ( token ) {
         return {
             login: decoded.login,
             role: decoded.role,
+            isBanned: decoded.isBanned,
             token: token
         };
     }
-    // let dbUser = await(getByLogin(user.login)).data;
-    // if(!dbUser){
-    //     return false;
-    // } else{
-    //     if(dbUser.login == user.login && user.password == dbUser.password){
-    //         let token = await(jwt.sign(dbUser, "secret", {expiresIn: '1h'}));
-    //         return {
-    //             login: dbUser.login,
-    //             role: dbUser.role,
-    //             token: token
-    //         };
-    //     }
-    // }
 });
 
 model.login = async( function ( user ) {
@@ -123,6 +123,7 @@ model.login = async( function ( user ) {
             return {
                 login: dbUser.login,
                 role: dbUser.role,
+                isBanned: dbUser.isBanned,
                 token: token
             };
         }

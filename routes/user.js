@@ -11,6 +11,7 @@ let formObject = function ( req ) {
         _id: req.body.user._id || null,
         login: req.body.user.login,
         password: req.body.user.password,
+        isBanned: req.body.user.isBanned == undefined ? false : req.body.user.isBanned,
         role: req.body.user.role || 'user',
         email: req.body.user.email,
         age: req.body.user.age,
@@ -107,6 +108,27 @@ router.put('/update', function(req,res){
           message: err.message
         });
       });
+});
+
+router.put('/ban/:id', function ( req,res ) {
+    if (!req.params.id){
+        res.send({
+            statusCode: 500,
+            data: null,
+            message: 'id not found'
+        });
+    }
+    User.ban(req.params.id)
+        .then(success=>{
+            res.send(success);
+        })
+        .catch(err=>{
+            res.send({
+                statusCode: 500,
+                data: err,
+                message: 'Server error'
+            });
+        });
 });
 
 router.delete('/delete/:id', function(req,res){

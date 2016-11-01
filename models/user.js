@@ -96,6 +96,15 @@ model.ban = async(function ( _id ) {
     return bannedUser;
 });
 
+model.enable = async(function ( _id ) {
+    if(!_id)
+        return {statusCode: 404, data: null, message: "User not found"};
+    let user = await (db.User.findOne({_id:_id, status: 'updated'}));
+    user.isBanned = false;
+    let bannedUser = user.save();
+    return bannedUser;
+});
+
 model.tokenAutorize = async(function ( token ) {
     let decoded;
     try {

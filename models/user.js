@@ -113,12 +113,22 @@ model.tokenAutorize = async(function ( token ) {
         return err;
     }
     if(decoded){
-        return {
-            login: decoded.login,
-            role: decoded.role,
-            isBanned: decoded.isBanned,
-            token: token
-        };
+        let dbUser = await(getByLogin(decoded.login)).data;
+        if(!dbUser.isBanned){
+            return {
+                login: decoded.login,
+                role: decoded.role,
+                isBanned: decoded.isBanned,
+                token: token
+            };
+        } else {
+            return {
+                statusCode: 403,
+                name: 'Authorization error',
+                data: null,
+                message: 'Your account banned'
+            }
+        }
     }
 });
 
@@ -128,13 +138,22 @@ model.login = async( function ( user ) {
         return false;
     } else{
         if(dbUser.login == user.login && user.password == dbUser.password){
-            let token = await(jwt.sign(dbUser, "secret", {expiresIn: '1h'}));
-            return {
-                login: dbUser.login,
-                role: dbUser.role,
-                isBanned: dbUser.isBanned,
-                token: token
-            };
+            if(!dbUser.isBanned){
+                let token = await(jwt.sign(dbUser, "secret", {expiresIn: '1h'}));
+                return {
+                    login: dbUser.login,
+                    role: dbUser.role,
+                    isBanned: dbUser.isBanned,
+                    token: token
+                };
+            } else {
+                return {
+                    statusCode: 403,
+                    name: 'Authorization error',
+                    data: null,
+                    message: 'Your account banned'
+                }
+            }
         }
     }
 } );

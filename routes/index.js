@@ -27,11 +27,15 @@ router.post('/authorize', function ( req, res, next ) {
           message: 'Unauthorized'
         });
       } else if(data.message && data.name) {
-        res.send({
-          statusCode: 500,
-          data: data,
-          message: 'Token error'
-        });
+        if(data.statusCode == 403){ //permissions denied - Banned
+          return data;
+        } else {
+          res.send({
+            statusCode: 500,
+            data: data,
+            message: 'Token error'
+          });
+        }
       } else{
         res.send({
           statusCode: 0,
@@ -46,17 +50,21 @@ router.post('/authorize', function ( req, res, next ) {
       password: req.body.password
     }).then(function ( data ) {
       if(!data){
-        res.send({
+        res.send ( {
           statusCode: 500,
           data: null,
           message: 'Unauthorized'
-        });
-      }else{
-        res.send({
-          statusCode: 0,
-          data: data,
-          message: 'Authorized'
-        });
+        } );
+      } else{
+        if(data.statusCode == 403){ //permissions denied - Banned
+          res.send(data);
+        } else {
+          res.send ( {
+            statusCode: 0,
+            data: data,
+            message: 'Authorized'
+          } );
+        }
       }
     });
   }

@@ -5,7 +5,8 @@ let db = require('../mongoose');
 let userSchema = new db.Schema({
     login: {
         type: String,
-        required: [true, 'login is required']
+        required: [true, 'login is required'],
+        unique: true
     },
     password: {
         type: String,
@@ -19,6 +20,10 @@ let userSchema = new db.Schema({
     email: String,
     age: Number,
     sex: String,
+    firstName: String,
+    lastName: String,
+    phone: String,
+    skype: String,
     updatedAt: {
         type: Date,
         default: Date.now

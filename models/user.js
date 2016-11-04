@@ -17,6 +17,10 @@ model.toDTO = async(function(user){
         email: user.email,
         age: user.age,
         sex: user.sex,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        phone: user.phone,
+        skype: user.skype,
         status: user.status
     }
 });
@@ -70,6 +74,10 @@ model.update = async(function(data){
         user.isBanned = data.isBanned;
         user.age = data.age;
         user.sex = data.sex;
+        user.firstName = data.firstName;
+        user.lastName = data.lastName;
+        user.phone = data.phone;
+        user.skype = data.skype;
 
         modelHelper.setStatusUpdated(user);
         await(user.save());

@@ -15,7 +15,11 @@ let formObject = function ( req ) {
         role: req.body.user.role || 'user',
         email: req.body.user.email,
         age: req.body.user.age,
-        sex: req.body.user.sex
+        sex: req.body.user.sex,
+        firstName: req.body.user.firstName,
+        lastName: req.body.user.lastName,
+        phone: req.body.user.phone,
+        skype: req.body.user.skype
     }
 };
 

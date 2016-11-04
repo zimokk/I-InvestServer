@@ -69,6 +69,29 @@ router.get('/get/:id', function(req,res){
       });
 });
 
+router.post('/getByLogin', function(req,res){
+    let user = formObject(req);
+    if(!user.login){
+        res.send({
+            statusCode: 500,
+            data: null,
+            message: 'login not found'
+        });
+    } else{
+        User.getByLogin(user)
+            .then(success=>{
+                res.send(success);
+            })
+            .catch(err=>{
+                res.send({
+                    statusCode: 500,
+                    data: err,
+                    message: 'Server error'
+                });
+            });
+    }
+});
+
 router.post('/new', function(req, res){
   let user = formObject(req);
   User.addNew(user)

@@ -37,7 +37,6 @@ model.createMock = function () {
 
 model.addNew = async (function(company) {
     let user = await(User.getById(company.userId));
-    console.log(user);
     if(user){
         let newCompany = new db.Company({
             name: company.name,

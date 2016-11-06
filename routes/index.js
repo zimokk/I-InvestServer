@@ -7,10 +7,12 @@ const User = require('../models/user');
 
 let user = require('./user');
 let company = require('./company');
+let workplace = require('./workplace');
 
 /* GET home page. */
 router.use('/user', user);
 router.use('/company', company);
+router.use('/workplace', workplace);
 
 router.get('/', function(req, res, next) {
   res.json({ message: 'index' });

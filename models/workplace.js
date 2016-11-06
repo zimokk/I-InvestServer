@@ -31,6 +31,7 @@ model.addNew = async (function(workplace) {
             duration: workplace.duration,
             userId: user.data._id
         });
+        console.log(newWorkplace);
         const addWorkplaceResult = await (newWorkplace.save());
         return addWorkplaceResult;
     } else{

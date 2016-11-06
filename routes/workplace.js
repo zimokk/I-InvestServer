@@ -9,8 +9,8 @@ const Workplace = require('../models/workplace');
 let formObject = function ( req ) {
     return{
         _id: req.body.workplace._id || null,
-        name: req.body.workplace.company,
-        state: req.body.workplace.duration,
+        company: req.body.workplace.company,
+        duration: req.body.workplace.duration,
         userId: req.body.workplace.userId
     }
 };

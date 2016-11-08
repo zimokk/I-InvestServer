@@ -56,14 +56,14 @@ model.addNew = async (function(company) {
 model.getById = async(function(id){
     if(!id)
         return {statusCode: 404, data: null, message: "Company not found"};
-    let company = await(db.Company.findOne({_id:id}));
+    let company = await(db.Company.findOne({_id:id, status: 'updated'}));
     if (!company)
         return {statusCode: 404, data: null, message: "Company not found"};
     return {statusCode: 0, data: await(this.toDTO(company)), message: "Success"};
 });
 
 model.getByUserId = async(function(userId){
-    let companies = await(db.Company.find({userId:userId}));
+    let companies = await(db.Company.find({userId:userId, status: 'updated'}));
     return companies.map(company=>{
         return await (this.toDTO(company));
     });

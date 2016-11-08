@@ -43,7 +43,7 @@ model.addNew = async (function(workplace) {
 model.getById = async(function(id){
     if(!id)
         return {statusCode: 404, data: null, message: "Workplace not found"};
-    let workplace = await(db.Workplace.findOne({_id:id}));
+    let workplace = await(db.Workplace.findOne({_id:id, status: 'updated'}));
     if (!workplace)
         return {statusCode: 404, data: null, message: "Workplace not found"};
     return {statusCode: 0, data: await(this.toDTO(workplace)), message: "Success"};

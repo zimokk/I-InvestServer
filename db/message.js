@@ -2,21 +2,21 @@
 let db = require('../mongoose');
 
 
-let companySchema = new db.Schema({
-    name: {
+let messageSchema = new db.Schema({
+    title: {
+        type: String
+    },
+    text: {
         type: String,
-        required: [true, 'name is required']
+        required: [true, 'Text is required']
     },
-    state: {
-        type: Number,
-        required: [true, 'state is required']
-    },
-    userId: {
+    authorId: {
         type: db.Schema.Types.ObjectId,
         required: true
     },
-    foundation: Number,
-    budget: Number,
+    receiverId: {
+        type: db.Schema.Types.ObjectId
+    },
     updatedAt: {
         type: Date,
         default: Date.now
@@ -27,4 +27,4 @@ let companySchema = new db.Schema({
     }
 });
 
-module.exports = db.model("companies", companySchema);
+module.exports = db.model("messages", messageSchema);

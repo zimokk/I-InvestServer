@@ -8,11 +8,13 @@ const User = require('../models/user');
 let user = require('./user');
 let company = require('./company');
 let workplace = require('./workplace');
+let message = require('./message');
 
 /* GET home page. */
 router.use('/user', user);
 router.use('/company', company);
 router.use('/workplace', workplace);
+router.use('/message', message);
 
 router.get('/', function(req, res, next) {
   res.json({ message: 'index' });

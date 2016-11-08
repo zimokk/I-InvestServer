@@ -50,7 +50,7 @@ model.getById = async(function(id){
 });
 
 model.getByUserId = async(function(userId){
-    let workplaces = await(db.Workplace.find({userId:userId}));
+    let workplaces = await(db.Workplace.find({userId:userId, status: 'updated'}));
     return workplaces.map(workplace=>{
         return await (this.toDTO(workplace));
     });

@@ -78,7 +78,7 @@ router.post('/getByLogin', function(req,res){
             message: 'login not found'
         });
     } else{
-        User.getByLogin(user)
+        User.getByLogin(user.login)
             .then(success=>{
                 res.send(success);
             })

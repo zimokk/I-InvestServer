@@ -64,10 +64,10 @@ model.getById = async(function(_id){
     return {statusCode: 0, data: await(this.toDTO(user)), message: "Success"};
 });
 
-model.getByLogin = async(function ( user ) {
-    if(!user.login)
+model.getByLogin = async(function ( userLogin ) {
+    if(!userLogin)
         return {statusCode: 404, data: null, message: "User not found"};
-    let dbUser = await(db.User.findOne({login:user.login, status: 'updated'}));
+    let dbUser = await(db.User.findOne({login:userLogin, status: 'updated'}));
     if (!dbUser)
         return {statusCode: 404, data: null, message: "User not found"};
     return {statusCode: 0, data: await(this.toDTO(dbUser)), message: "Success"};

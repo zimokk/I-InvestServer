@@ -65,17 +65,26 @@ let addLogins = function ( messagesArray ) {
 
 model.getByAuthorId = async(function(authorId){
     let messages = await(db.Message.find({authorId:authorId, status: 'updated'}));
-    return addLogins(messages.map(message=>{
+    return (addLogins(messages.map(message=>{
         return await (this.toDTO(message));
-    }));
+    }))).reverse();
 
 });
 
 model.getByReceiverId = async(function(receiverId){
     let messages = await(db.Message.find({receiverId:receiverId, status: 'updated'}));
-    return addLogins(messages.map(message=>{
+    return (addLogins(messages.map(message=>{
         return await (this.toDTO(message));
-    }));
+    }))).reverse();
+});
+
+model.getByReceiverLogin = async(function(receiverLogin){
+    let receiver = await(User.getByLogin(receiverLogin));
+    let messages = await(db.Message.find({receiverId:receiver.data._id, status: 'updated'}));
+    console.log(messages)
+    return (addLogins(messages.map(message=>{
+        return await (this.toDTO(message));
+    }))).reverse();
 });
 
 model.update = async(function(data){

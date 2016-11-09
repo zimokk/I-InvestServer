@@ -126,6 +126,42 @@ router.get('/getByReceiver/:id', function ( req, res ) {
         });
 });
 
+router.post('/getByReceiverLogin', function(req,res){
+    let receiverLogin = req.body.receiverLogin;
+    console.log(receiverLogin);
+    if(!receiverLogin){
+        res.send({
+            statusCode: 500,
+            data: null,
+            message: 'User not found'
+        });
+    } else{
+        Message.getByReceiverLogin(receiverLogin)
+            .then(success=>{
+                if(success){
+                    res.send({
+                        statusCode: 0,
+                        data: success,
+                        message: 'Messages result'
+                    });
+                } else {
+                    res.send({
+                        statusCode: 500,
+                        data: null,
+                        message: 'Server Error'
+                    });
+                }
+            })
+            .catch(err=>{
+                res.send({
+                    statusCode: 500,
+                    data: err,
+                    message: 'Server error'
+                });
+            });
+    }
+});
+
 router.post('/new', function(req, res){
     let message = formObject(req);
     Message.addNew(message)

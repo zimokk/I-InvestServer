@@ -7,12 +7,6 @@ let actionSchema = new db.Schema({
         type: String,
         required: [true, 'name is required']
     },
-    price: {
-        type: Number,
-        required: [true, 'price is required']
-    },
-    risk: Boolean,
-    coefficient: Number,
     updatedAt: {
         type: Date,
         default: Date.now

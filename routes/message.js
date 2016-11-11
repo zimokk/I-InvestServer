@@ -128,7 +128,6 @@ router.get('/getByReceiver/:id', function ( req, res ) {
 
 router.post('/getByReceiverLogin', function(req,res){
     let receiverLogin = req.body.receiverLogin;
-    console.log(receiverLogin);
     if(!receiverLogin){
         res.send({
             statusCode: 500,

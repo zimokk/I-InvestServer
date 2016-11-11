@@ -9,12 +9,15 @@ let user = require('./user');
 let company = require('./company');
 let workplace = require('./workplace');
 let message = require('./message');
+let action = require('./action');
+const Csv = require('../tools/csv_parser');
 
 /* GET home page. */
 router.use('/user', user);
 router.use('/company', company);
 router.use('/workplace', workplace);
 router.use('/message', message);
+router.use('/action', action);
 
 router.get('/', function(req, res, next) {
   res.json({ message: 'index' });

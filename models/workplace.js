@@ -80,4 +80,16 @@ model.removeById = async (function(id){
     return workplace;
 });
 
+model.removeAllByUserId = async (function(userId){
+    if(!userId)
+        return {statusCode: 404, data: null, message: "User not found"};
+    let workplaces = await(db.Workplace.find({userId:userId, status: 'updated'}));
+    workplaces.forEach(workplace=>{
+        modelHelper.setStatusRemoved(workplace);
+    });
+    return workplaces.map(workplace=>{
+        return await (this.toDTO(workplace));
+    });
+});
+
 module.exports = model;

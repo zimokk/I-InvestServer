@@ -95,4 +95,18 @@ model.removeById = async (function(id){
     return company;
 });
 
+model.removeAllByUserId = async (function(userId){
+    if(!userId)
+        return {statusCode: 404, data: null, message: "Company not found"};
+    let companies = await(db.Company.find({userId:userId, status: 'updated'}));
+    if(companies){
+        companies.forEach(company=>{
+            modelHelper.setStatusRemoved(company);
+        });
+        return companies.map(company=>{
+            return await (this.toDTO(company));
+        });
+    }
+});
+
 module.exports = model;

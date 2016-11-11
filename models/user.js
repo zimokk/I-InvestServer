@@ -4,6 +4,8 @@ const await = require('asyncawait/await');
 const jwt = require('jsonwebtoken');
 const db = require('../db');
 const modelHelper = require('../helpers').model;
+let Company = require('./company');
+let Workplace = require('./workplace');
 
 let model = {};
 
@@ -99,6 +101,8 @@ model.removeById = async (function(_id){
     if(!_id)
         return {statusCode: 4, data: null, message: "User not found"};
     let user = await (db.User.findOne({_id:_id, status: 'updated'}));
+    Company.removeAllByUserId(user._id);
+    Workplace.removeAllByUserId(user._id);
     modelHelper.setStatusRemoved(user);
     let removedUser = user.save();
     return removedUser;

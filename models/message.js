@@ -81,7 +81,6 @@ model.getByReceiverId = async(function(receiverId){
 model.getByReceiverLogin = async(function(receiverLogin){
     let receiver = await(User.getByLogin(receiverLogin));
     let messages = await(db.Message.find({receiverId:receiver.data._id, status: 'updated'}));
-    console.log(messages)
     return (addLogins(messages.map(message=>{
         return await (this.toDTO(message));
     }))).reverse();

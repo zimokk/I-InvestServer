@@ -12,7 +12,8 @@ let model = {};
 model.toDTO = async(function(action){
     return {
         _id: action._id,
-        name: action.name
+        name: action.name,
+        prices: action.prices
     }
 });
 
@@ -43,7 +44,10 @@ model.getById = async(function(id){
     let action = await(db.Action.findOne({_id:id, status: 'updated'}));
     if (!action)
         return {statusCode: 404, data: null, message: "Action not found"};
-    return {statusCode: 0, data: await(this.toDTO(action)), message: "Success"};
+    else{
+        action.prices = await(Price.getByActionId(action._id));
+        return {statusCode: 0, data: await(this.toDTO(action)), message: "Success"};
+    }
 });
 
 model.removeById = async (function(id){

@@ -3,96 +3,66 @@ const async = require('asyncawait/async');
 const await = require('asyncawait/await');
 const db = require('../db');
 const modelHelper = require('../helpers').model;
-let User = require('./user');
+let Action = require('./action');
 
 let model = {};
 
-model.toDTO = async(function(company){
+model.toDTO = async(function(price){
     return {
-        _id: company._id,
-        name: company.name,
-        state: company.state,
-        userId: company.userId,
-        foundation: company.foundation,
-        budget: company.budget
+        _id: price._id,
+        actionId: price.actionId,
+        high: price.high,
+        low: price.low,
+        open: price.open,
+        close: price.close,
+        volume: price.volume,
+        adj: price.adj,
+        date: price.date
     }
 });
 
 model.getExisting = async (function(){
-    let companies = await(db.Company.find({status: 'updated'}));
-    return companies.map(company=>{
-        return await (this.toDTO(company));
+    let prices = await(db.Price.find({status: 'updated'}));
+    return prices.map(price=>{
+        return await (this.toDTO(price));
     });
 });
 
-model.createMock = function () {
-    model.addNew({
-        name: 'Topaz',
-        state: 1832,
-        userId: 1,
-        foundation: 2016,
-        budget: 500000
-    });
-};
-
-model.addNew = async (function(company) {
-    let user = await(User.getById(company.userId));
-    if(user){
-        let newCompany = new db.Company({
-            name: company.name,
-            state: company.state,
-            userId: user.data._id,
-            foundation: company.foundation,
-            budget: company.budget
+model.addNew = async (function(price) {
+    if(price.actionId){
+        let newPrice = new db.Price({
+            actionId: price.actionId,
+            high: price.high,
+            low: price.low,
+            open: price.open,
+            close: price.close,
+            volume: price.volume,
+            adj: price.adj,
+            date: price.date
         });
-        const addCompanyResult = await (newCompany.save());
-        return addCompanyResult;
+        newPrice.save();
+        // const addPriceResult = await (newPrice.save());
+        // return addPriceResult;
     } else{
-        return {statusCode: 404, data: null, message: "User not found"};
+        return {statusCode: 404, data: null, message: "Action not found"};
     }
 
 });
 
 model.getById = async(function(id){
     if(!id)
-        return {statusCode: 404, data: null, message: "Company not found"};
-    let company = await(db.Company.findOne({_id:id, status: 'updated'}));
-    if (!company)
-        return {statusCode: 404, data: null, message: "Company not found"};
-    return {statusCode: 0, data: await(this.toDTO(company)), message: "Success"};
+        return {statusCode: 404, data: null, message: "Price not found"};
+    let price = await(db.Price.findOne({_id:id, status: 'updated'}));
+    if (!price)
+        return {statusCode: 404, data: null, message: "Price not found"};
+    return {statusCode: 0, data: await(this.toDTO(price)), message: "Success"};
 });
 
-model.getByUserId = async(function(userId){
-    let companies = await(db.Company.find({userId:userId, status: 'updated'}));
-    return companies.map(company=>{
-        return await (this.toDTO(company));
+model.getByActionId = async(function(actionId){
+    let prices = await(db.Price.find({actionId:actionId, status: 'updated'}));
+    return prices.map(price=>{
+        return await (this.toDTO(price));
     });
-});
-
-model.update = async(function(data){
-
-    let company = await(db.Company.findOne({_id:data._id}));
-    if(company){
-        company.name =  data.name;
-        company.state = data.state;
-        company.userId = data.userId;
-        company.foundation = data.foundation;
-        company.budget = data.budget;
-
-        modelHelper.setStatusUpdated(company);
-        await(company.save());
-    }
-
-    return this.toDTO(company);
-});
-
-model.removeById = async (function(id){
-    if(!id)
-        return {statusCode: 404, data: null, message: "Company not found"};
-    let company = await (db.Company.findOne({_id:id}));
-    modelHelper.setStatusRemoved(company);
-    let removedCompany = company.save();
-    return company;
 });
 
 module.exports = model;

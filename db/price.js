@@ -7,19 +7,22 @@ let priceSchema = new db.Schema({
         type: db.Schema.Types.ObjectId
     },
     high: {
-        type: Double
+        type: Number
     },
     low: {
-        type: Double
+        type: Number
+    },
+    open: {
+        type: Number
     },
     close: {
-        type: Double
+        type: Number
     },
     volume: {
-        type: Integer
+        type: Number
     },
     adj: {
-        type: Double
+        type: Number
     },
     date:{
         type: Date
@@ -34,4 +37,4 @@ let priceSchema = new db.Schema({
     }
 });
 
-module.exports = db.model("actions", actionSchema);
+module.exports = db.model("prices", priceSchema);

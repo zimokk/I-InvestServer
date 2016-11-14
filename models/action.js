@@ -1,8 +1,11 @@
 'use strict';
 const async = require('asyncawait/async');
 const await = require('asyncawait/await');
+const csv = require("fast-csv");
+const fs = require('fs');
 const db = require('../db');
 const modelHelper = require('../helpers').model;
+const Price = require('./price');
 
 let model = {};
 
@@ -27,11 +30,11 @@ model.addNew = async (function(action) {
             state: action.state
         });
         const addActionResult = await (newAction.save());
+        model.createFromPath("test.csv", addActionResult._id);
         return addActionResult;
     } else{
         return {statusCode: 404, data: null, message: "Action is null"};
     }
-
 });
 
 model.getById = async(function(id){
@@ -50,6 +53,28 @@ model.removeById = async (function(id){
     modelHelper.setStatusRemoved(action);
     let removedAction = action.save();
     return action;
+});
+
+model.createFromPath = async(function ( path, actionId ) {
+    var stream = fs.createReadStream(path);
+
+    csv.fromPath(path)
+        .on("data", function(data){
+            let date = data[0], open = data[1], high = data[2], low = data[3], close = data[4], volume = data[5], adj = data[7];
+            Price.addNew({
+                actionId: actionId,
+                high: high,
+                low: low,
+                open: open,
+                close: close,
+                volume: volume,
+                adj: adj,
+                date: date
+            })
+        })
+        .on("end", function(){
+            
+        });
 });
 
 module.exports = model;

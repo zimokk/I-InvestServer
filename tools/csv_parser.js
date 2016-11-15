@@ -1,7 +1,7 @@
 'use strict';
-const csv = require("fast-csv");
 const async = require('asyncawait/async');
 const await = require('asyncawait/await');
+const csv = require("fast-csv");
 const fs = require('fs');
 
 let tool = {};

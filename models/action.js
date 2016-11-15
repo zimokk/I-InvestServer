@@ -64,7 +64,7 @@ model.createFromPath = async(function ( path, actionId ) {
 
     csv.fromPath(path)
         .on("data", function(data){
-            let date = data[0], open = data[1], high = data[2], low = data[3], close = data[4], volume = data[5], adj = data[7];
+            let date = data[0], open = data[1], high = data[2], low = data[3], close = data[4], volume = data[5], adj = data[6];
             Price.addNew({
                 actionId: actionId,
                 high: high,

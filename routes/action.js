@@ -75,6 +75,33 @@ router.post('/new', function(req, res){
         });
 });
 
+
+router.post('/findByName', function(req, res){
+    let nameContains = req.body.nameContains;
+    Action.findByName(nameContains).then(function ( success ) {
+            if(success){
+                res.send({
+                    statusCode: 0,
+                    data: success,
+                    message: 'Actions result'
+                });
+            } else {
+                res.send({
+                    statusCode: 500,
+                    data: null,
+                    message: 'Server Error'
+                });
+            }
+        })
+        .catch(err=>{
+            res.send({
+                statusCode: 500,
+                data: err,
+                message: 'Server error'
+            });
+        });
+});
+
 router.delete('/delete/:id', function(req,res){
     Action.removeById(req.params.id)
         .then(success=>{

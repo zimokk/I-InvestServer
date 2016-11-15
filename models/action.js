@@ -81,4 +81,11 @@ model.createFromPath = async(function ( path, actionId ) {
         });
 });
 
+model.findByName = async(function ( nameContains ) {
+    let actions = await(db.Action.find({status: 'updated', "name" : {$regex : ".*"+nameContains+".*"}}));
+    return actions.map(action=>{
+        return await (this.toDTO(action));
+    });
+});
+
 module.exports = model;

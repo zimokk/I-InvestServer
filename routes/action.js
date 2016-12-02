@@ -59,6 +59,42 @@ router.get('/get/:id', function(req,res){
         });
 });
 
+router.get('/getTop', function(req,res){
+    Action.getTop()
+        .then(success=>{
+            res.send({
+                statusCode: 0,
+                data: success,
+                message: 'Top actions'
+            });
+        })
+        .catch(err=>{
+            res.send({
+                statusCode: 500,
+                data: err,
+                message: 'Worst actions'
+            });
+        });
+});
+
+router.get('/getBottom', function(req,res){
+    Action.getBottom()
+        .then(success=>{
+            res.send({
+                statusCode: 0,
+                data: success,
+                message: 'Server error'
+            });
+        })
+        .catch(err=>{
+            res.send({
+                statusCode: 500,
+                data: err,
+                message: 'Server error'
+            });
+        });
+});
+
 router.post('/new', function(req, res){
     let action = formObject(req);
     Action.addNew(action)
@@ -74,7 +110,6 @@ router.post('/new', function(req, res){
             res.send({statusCode: 500, data: null, message: err.message});
         });
 });
-
 
 router.post('/findByName', function(req, res){
     let nameContains = req.body.nameContains;

@@ -88,4 +88,38 @@ model.findByName = async(function ( nameContains ) {
     });
 });
 
+model.getTop = async (function(){
+    let topActions = [];
+    let actions = await(db.Action.find({status: 'updated'}))
+        .map(action=>{
+            return await (this.toDTO(action));
+    });
+    actions.forEach(action =>{
+        for(let i = 0; i < 3; i++){
+            if(!topActions[i] || await(Price.getChanges(topActions[i])) < await(Price.getChanges(action))){
+                topActions[i] = action;
+                break;
+            }
+        }
+    });
+    return topActions;
+});
+
+model.getBottom = async (function(){
+    let topActions = [];
+    let actions = await(db.Action.find({status: 'updated'}))
+        .map(action=>{
+            return await (this.toDTO(action));
+        });
+    actions.forEach(action =>{
+        for(let i = 0; i < 3; i++){
+            if(!topActions[i] || await(Price.getChanges(topActions[i])) > await(Price.getChanges(action))){
+                topActions[i] = action;
+                break;
+            }
+        }
+    });
+    return topActions;
+});
+
 module.exports = model;

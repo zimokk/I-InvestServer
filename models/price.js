@@ -65,4 +65,13 @@ model.getByActionId = async(function(actionId){
     });
 });
 
+model.getChanges = async(function ( action ) {
+    let lastPrices = await(db.Price.find({actionId:action._id, status: 'updated'}).sort({ $natural: -1 }).limit(10)).map(price=>{
+        return await (this.toDTO(price));
+    });
+    let startPrice = lastPrices[9].close;
+    let endPrice = lastPrices[0].close;
+    return (startPrice - endPrice) / startPrice * 100;
+});
+
 module.exports = model;

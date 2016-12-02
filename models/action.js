@@ -98,6 +98,7 @@ model.getTop = async (function(){
         for(let i = 0; i < 3; i++){
             if(!topActions[i] || await(Price.getChanges(topActions[i])) < await(Price.getChanges(action))){
                 topActions[i] = action;
+                topActions[i].change = await(Price.getChanges(topActions[i]));
                 break;
             }
         }
@@ -115,6 +116,7 @@ model.getBottom = async (function(){
         for(let i = 0; i < 3; i++){
             if(!topActions[i] || await(Price.getChanges(topActions[i])) > await(Price.getChanges(action))){
                 topActions[i] = action;
+                topActions[i].change = await(Price.getChanges(topActions[i]));
                 break;
             }
         }

@@ -71,7 +71,7 @@ model.getChanges = async(function ( action ) {
     });
     let startPrice = lastPrices[9].close;
     let endPrice = lastPrices[0].close;
-    return (startPrice - endPrice) / startPrice * 100;
+    return ((startPrice - endPrice) / startPrice * 100).toPrecision(4)-1;
 });
 
 module.exports = model;

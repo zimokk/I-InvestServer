@@ -77,6 +77,24 @@ router.get('/getTop', function(req,res){
         });
 });
 
+router.get('/getTopChangingArray', function(req,res){
+    Action.getTopChangingArray()
+        .then(success=>{
+            res.send({
+                statusCode: 0,
+                data: success,
+                message: 'Top changing actions array'
+            });
+        })
+        .catch(err=>{
+            res.send({
+                statusCode: 500,
+                data: err,
+                message: 'Server error'
+            });
+        });
+});
+
 router.get('/getBottom', function(req,res){
     Action.getBottom()
         .then(success=>{

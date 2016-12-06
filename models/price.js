@@ -65,6 +65,15 @@ model.getByActionId = async(function(actionId){
     });
 });
 
+model.getMeanByActionId = async(function ( actionId ) {
+    let prices = await(db.Price.find({actionId:actionId, status: 'updated'}));
+    let sum = 0;
+    prices.forEach(function ( price ) {
+        sum = sum+price.close;
+    });
+    return sum/prices.length;
+});
+
 model.getChanges = async(function ( action ) {
     let lastPrices = await(db.Price.find({actionId:action._id, status: 'updated'}).sort({ $natural: -1 }).limit(10)).map(price=>{
         return await (this.toDTO(price));
@@ -72,6 +81,20 @@ model.getChanges = async(function ( action ) {
     let startPrice = lastPrices[9].close;
     let endPrice = lastPrices[0].close;
     return ((startPrice - endPrice) / startPrice * 100).toPrecision(4)-1;
+});
+model.getByActionIdLimited = async(function ( actionId, limit) {
+    let prices = await(db.Price.find({actionId:actionId, status: 'updated'}).sort({ $natural: -1 }).limit(limit)).reverse();
+    return prices.map(price=>{
+        return await (this.toDTO(price));
+    });
+});
+model.getMeanByActionIdLimited = async(function ( actionId, limit ) {
+    let prices = await(db.Price.find({actionId:actionId, status: 'updated'}).sort({ $natural: -1 }).limit(limit));
+    let sum = 0;
+    prices.reverse().forEach(function ( price ) {
+        sum = sum+price.close;
+    });
+    return sum/prices.length;
 });
 
 module.exports = model;
